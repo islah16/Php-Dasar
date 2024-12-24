@@ -1,7 +1,9 @@
 <?php
+    session_start();
+
     $mysqli = new mysqli('localhost', 'root', '', 'absen');
     $result = $mysqli->query("SELECT mahasiswa.Nim, mahasiswa.Nama, program_studi.Prodi
-    FROM mahasiswa INNER JOIN program_studi ON mahasiswa.Id_Prodi = program_studi.Id_Prodi;");
+    FROM mahasiswa INNER JOIN program_studi ON mahasiswa.Id_Prodi = program_studi.Id_Prodi");
 
    $mahasiswa = [];
 
@@ -11,6 +13,8 @@
 
     $no = 1
 ?>
+
+
 
 <!DOCTYPE html>
 <html lang="en">
@@ -24,8 +28,13 @@
 
 </head>
 <body>
-    <h1 align="center"> Data Mahasiswa KA 2021 </h1>   
     <div class="container"> 
+    <h1 class="text-center"> Data Mahasiswa KA 2021 </h1>   
+    <?php if (isset($_SESSION['success']) && $_SESSION['success'] == true ) { ?>
+       <div class="alert alert-success" role="alert">
+            <?= $_SESSION['message'] ?>
+       </div>
+       <?php } ?>
     <a href="Tambah_mahasiswa.php" class="btn btn-primary">Tambah</a> 
     <table class="table table-bordered table-hover">
         <tr>
@@ -43,6 +52,8 @@
                 <td><?= $row['Prodi']; ?></td>
                 <td>
                     <a href="edit_mahasiswa.php?nim=<?= $row['Nim']?>" class="btn btn-success">Edit</a>
+                    <a href="hapus_mahasiswa.php?nim=<?= $row['Nim']?>" class="btn btn-danger"
+                        onclick="return confirm('Apakah Anda Yakin Akan Menghapus Data Ini ?');">Hapus</a>
                 </td>    
         </tr>
         <?php } ?>
@@ -51,3 +62,9 @@
     
 </body>
 </html>
+
+<?php
+session_unset();
+
+?>
+
