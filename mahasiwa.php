@@ -1,6 +1,13 @@
 <?php
     session_start();
 
+    if (!isset($_SESSION['login'])) {
+        if ($_SESSION['login'] != true) {
+            header("Location: login.php");
+            exit;
+        }
+    }
+
     $mysqli = new mysqli('localhost', 'root', '', 'absen');
     $result = $mysqli->query("SELECT mahasiswa.Nim, mahasiswa.Nama, program_studi.Prodi
     FROM mahasiswa INNER JOIN program_studi ON mahasiswa.Id_Prodi = program_studi.Id_Prodi");
@@ -35,7 +42,8 @@
             <?= $_SESSION['message'] ?>
        </div>
        <?php } ?>
-    <a href="Tambah_mahasiswa.php" class="btn btn-primary">Tambah</a> 
+    <a href="Tambah_mahasiswa.php" class="btn btn-primary">Tambah</a>
+    <a href="logout.php" class="btn btn-warning">Logout</a> 
     <table class="table table-bordered table-hover">
         <tr>
             <th> No </th>
@@ -64,7 +72,8 @@
 </html>
 
 <?php
-session_unset();
+unset($_SESSION['success']);
+unset($_SESSION['message']);
 
 ?>
 
